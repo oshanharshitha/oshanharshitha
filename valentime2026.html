@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Creative Valentine ❤</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, #ff758c, #ff7eb3, #ffe0e0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      padding: 40px 30px;
+      width: 360px;
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+      animation: fadeIn 1.5s ease;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 15px;
+      text-shadow: 1px 1px 5px #ff4f7d;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 25px;
+      border: none;
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 1rem;
+      outline: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    button {
+      border: none;
+      padding: 14px 26px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .yes {
+      background: linear-gradient(45deg, #ff2e63, #ff4f7d);
+      color: #fff;
+    }
+
+    .yes:hover {
+      transform: scale(1.1) rotate(-5deg);
+      background: linear-gradient(45deg, #ff4f7d, #ff2e63);
+    }
+
+    .no {
+      background: #fff;
+      color: #ff2e63;
+      position: relative;
+    }
+
+    .hearts span, .popup, .sparkle {
+      position: absolute;
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+    }
+
+    .popup {
+      font-size: 2.5rem;
+      color: #ffeb3b;
+      animation: popupAnim 0.6s ease forwards;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      z-index: 10;
+      text-shadow: 2px 2px 10px #ff2e63;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes popupAnim {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      animation: fadeIn 1s ease;
+      text-shadow: 1px 1px 5px #ff4f7d;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Will You Be My Valentine? ❤</h1>
+    <p>Enter your details 💕</p>
+
+    <input id="boyName" placeholder="Boy's Name" />
+    <input id="girlName" placeholder="Girl's Name" />
+    <input id="age" type="number" placeholder="Age" />
+
+    <div class="buttons">
+      <button class="yes" onclick="sayYes()">Yes 💖</button>
+      <button class="no" onmouseover="moveButton(this)">No 😢</button>
+    </div>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <div class="hearts" id="hearts"></div>
+
+  <!-- Updated Happy Valentine-themed sounds -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.fesliyanstudios.com/play-mp3/387" type="audio/mpeg">
+  </audio>
+  <audio id="hoverSound">
+    <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="popSound">
+    <source src="https://www.fesliyanstudios.com/play-mp3/388" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const hoverSound = document.getElementById('hoverSound');
+    const popSound = document.getElementById('popSound');
+    music.play().catch(()=>{});
+
+    function sayYes() {
+      const boy = document.getElementById('boyName').value || 'Boy';
+      const girl = document.getElementById('girlName').value || 'Girl';
+      const age = document.getElementById('age').value || 'forever young';
+
+      document.getElementById('result').textContent = `Yay! 💘 ${boy} & ${girl}, ${age} years old ❤️ Happy Valentine’s Day 💞`;
+      createHearts();
+      showPopup('Happy Valentine! 💝');
+      popSound.play(); // Happy Valentine-themed sound on Yes click
+      createSparkles();
+    }
+
+    function moveButton(btn) {
+      const x = Math.random() * window.innerWidth - window.innerWidth / 2;
+      const y = Math.random() * window.innerHeight - window.innerHeight / 2;
+      const rotate = Math.random() * 360;
+      btn.style.transition = 'transform 0.6s ease-in-out';
+      btn.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg) scale(0.85)`;
+      document.getElementById('result').textContent = "Hey 😅 you can't say No!";
+      hoverSound.play();
+    }
+
+    function createHearts() {
+      const heartsContainer = document.getElementById('hearts');
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement('span');
+        heart.textContent = '❤';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+    }
+
+    function showPopup(message) {
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.textContent = message;
+      document.body.appendChild(popup);
+      setTimeout(() => popup.remove(), 1500);
+    }
+
+    function createSparkles() {
+      for(let i=0; i<50; i++) {
+        const sparkle = document.createElement('span');
+        sparkle.className = 'sparkle';
+        sparkle.textContent = '✨';
+        sparkle.style.left = Math.random() * window.innerWidth + 'px';
+        sparkle.style.top = Math.random() * window.innerHeight + 'px';
+        sparkle.style.fontSize = (10 + Math.random()*20) + 'px';
+        sparkle.style.animationDuration = (1 + Math.random()*2) + 's';
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 2000);
+      }
+    }
+
+    console.assert(typeof moveButton === 'function');
+    console.assert(typeof sayYes === 'function');
+  </script>
+
+</body>
+</html>
